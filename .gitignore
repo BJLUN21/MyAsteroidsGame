@@ -4,5 +4,6 @@
 *.iml
 .DS_Store
 *.jar
+!lib/*.jar
 /*/runner/
 /JavaModularAsteroids/nbproject/private/
