@@ -15,10 +15,6 @@ public class AsteroidPlugin implements IGamePluginService {
 
 	private Entity asteroid;
 
-	//Default constructor
-	public AsteroidPlugin() {
-	}
-
 	@Override
 	public void start(GameData gameData, World world) {
 

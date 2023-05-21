@@ -3,23 +3,33 @@ package dk.sdu.mmmi.cbse.asteroidsystem;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
+import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
+import dk.sdu.mmmi.cbse.common.services.IAsteroidSplitter;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 
-public class AsteroidControlSystem implements IEntityProcessingService {
+public class AsteroidControlSystem implements IEntityProcessingService, IAsteroidSplitter {
 	@Override
 	public void process(GameData gameData, World world) {
 
 		for (Entity asteroid : world.getEntities(Asteroid.class)) {
 			PositionPart positionPart = asteroid.getPart(PositionPart.class);
 			MovingPart movingPart = asteroid.getPart(MovingPart.class);
+			LifePart lp = asteroid.getPart(LifePart.class);
 
 			// accelerating
 			movingPart.setUp(true);
 
 			movingPart.process(gameData, asteroid);
 			positionPart.process(gameData, asteroid);
+
+			if (lp.getLife() <= 0) {
+				if (!asteroid.getIsSplit()) {
+					createSplitAsteroid(asteroid, world);
+				}
+				world.removeEntity(asteroid);
+			}
 
 			updateShape(asteroid);
 		}
@@ -76,5 +86,41 @@ public class AsteroidControlSystem implements IEntityProcessingService {
 
 		entity.setShapeX(shapex);
 		entity.setShapeY(shapey);
+	}
+
+	@Override
+	public void createSplitAsteroid(Entity entity, World world) {
+
+		PositionPart pp = entity.getPart(PositionPart.class);
+
+		float maxSpeed = 50;
+		float acceleration = 50;
+		float deceleration = 0;
+
+		float[] displacements = {
+				 20f,
+				-20f
+		};
+		float[] radians = {
+				(float) Math.PI * 2 * (float) Math.random(),
+				(float) Math.PI * 2 * (float) Math.random()
+		};
+		float rotationSpeed = 0;
+
+		float radius = 3f;
+
+		for (int i = 0; i < 2; i++) {
+
+			float x = pp.getX() + displacements[i];
+			float y = pp.getY() + displacements[i];
+
+			Entity asteroid = new Asteroid(true);
+			asteroid.add(new MovingPart(deceleration, acceleration, maxSpeed, rotationSpeed));
+			asteroid.add(new PositionPart(x, y, radians[i]));
+			asteroid.add(new LifePart(1));
+			asteroid.setRadius(radius);
+
+			world.addEntity(asteroid);
+		}
 	}
 }

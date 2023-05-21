@@ -1,13 +1,18 @@
 package dk.sdu.mmmi.cbse.enemysystem;
 
-import dk.sdu.mmmi.cbse.bulletsystem.Bullet;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
+import dk.sdu.mmmi.cbse.common.services.BulletSPI;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
+
+import java.util.Collection;
+import java.util.ServiceLoader;
+
+import static java.util.stream.Collectors.toList;
 
 public class EnemyControlSystem implements IEntityProcessingService {
 	@Override
@@ -18,6 +23,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
 		for (Entity enemy : world.getEntities(Enemy.class)) {
 			PositionPart positionPart = enemy.getPart(PositionPart.class);
 			MovingPart movingPart = enemy.getPart(MovingPart.class);
+			LifePart lp = enemy.getPart(LifePart.class);
 
 			// turning
 			if (rng < 0.5) {
@@ -33,11 +39,17 @@ public class EnemyControlSystem implements IEntityProcessingService {
 
 			// shooting
 			if (rng > 0.48  && rng <= 0.52) {
-				world.addEntity(shoot(gameData, positionPart.getX(), positionPart.getY(), positionPart.getRadians()));
+				for (BulletSPI bullet : getBulletSPIs()) {
+					world.addEntity(bullet.createBullet(enemy, gameData));
+				}
 			}
 
 			movingPart.process(gameData, enemy);
 			positionPart.process(gameData, enemy);
+
+			if (lp.getLife() <= 0) {
+				world.removeEntity(enemy);
+			}
 
 			updateShape(enemy);
 
@@ -86,22 +98,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
 		enemy.setShapeY(shapey);
 	}
 
-	private Entity shoot(GameData gameData, float x, float y, float radians) {
-
-		float maxSpeed = 500;
-		float acceleration = 500000000;
-		float deceleration = 0;
-
-		float rotationSpeed = 0;
-
-		float radius = 0.5f;
-
-		Entity bullet = new Bullet(false);
-		bullet.add(new MovingPart(deceleration, acceleration, maxSpeed, rotationSpeed));
-		bullet.add(new PositionPart(x + (float) Math.cos(radians) * 12, y + (float) Math.sin(radians) * 12, radians));
-		bullet.add(new LifePart(1,1));
-		bullet.setRadius(radius);
-
-		return bullet;
+	private Collection<? extends BulletSPI> getBulletSPIs() {
+		return ServiceLoader.load(BulletSPI.class).stream().map(ServiceLoader.Provider::get).collect(toList());
 	}
 }
