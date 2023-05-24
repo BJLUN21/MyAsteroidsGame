@@ -9,7 +9,7 @@
         <version>1.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>CommonBullet</artifactId>
+    <artifactId>Bullet</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>

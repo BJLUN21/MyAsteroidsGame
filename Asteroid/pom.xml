@@ -9,9 +9,9 @@
         <version>1.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>CommonAsteroid</artifactId>
+    <artifactId>Asteroid</artifactId>
     <packaging>jar</packaging>
-    <name>CommonAsteroid</name>
+    <name>Asteroid</name>
 
     <dependencies>
         <dependency>

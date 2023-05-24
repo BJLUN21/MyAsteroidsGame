@@ -9,9 +9,9 @@
         <version>1.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>CommonPlayer</artifactId>
+    <artifactId>Player</artifactId>
     <packaging>jar</packaging>
-    <name>CommonPlayer</name>
+    <name>Player</name>
 
     <dependencies>
         <dependency>

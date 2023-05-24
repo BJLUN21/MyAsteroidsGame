@@ -9,7 +9,7 @@
         <version>1.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>CommonEnemy</artifactId>
+    <artifactId>Enemy</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>

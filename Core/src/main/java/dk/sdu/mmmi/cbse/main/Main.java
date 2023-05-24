@@ -6,10 +6,7 @@ import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 public class Main {
 
 	public static void main(String[] args) {
-/*
-		System.setProperty("org.lwjgl.util.Debug", "true");
-		System.setProperty("org.lwjgl.util.DebugLoader", "true");
-*/
+
 		Lwjgl3ApplicationConfiguration cfg = new Lwjgl3ApplicationConfiguration();
 		cfg.setTitle("Asteroids");
 		int width = 1280;
