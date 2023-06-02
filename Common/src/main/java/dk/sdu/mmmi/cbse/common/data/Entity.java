@@ -20,7 +20,7 @@ public class Entity implements Serializable {
 	private boolean isAsteroid = false;
 	private boolean isSplit = false;
 	private boolean isBullet = false;
-	private boolean isFriendly;
+	private boolean isFriendly = false;
 
 	public Entity() {
 		parts = new ConcurrentHashMap<>();

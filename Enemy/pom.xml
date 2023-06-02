@@ -11,6 +11,7 @@
 
     <artifactId>Enemy</artifactId>
     <packaging>jar</packaging>
+    <name>Enemy</name>
 
     <dependencies>
         <dependency>

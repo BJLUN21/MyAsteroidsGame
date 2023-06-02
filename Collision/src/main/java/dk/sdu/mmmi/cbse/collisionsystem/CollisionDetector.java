@@ -48,18 +48,7 @@ public class CollisionDetector implements IPostEntityProcessingService {
 	}
 
 	public boolean checkIfFriendly(Entity e1, Entity e2) {
-		if(e1.getIsPlayer() && e2.getIsBullet()) {
-			return e2.getIsFriendly();
-		} else if (e2.getIsPlayer() && e1.getIsBullet()) {
-			return e1.getIsFriendly();
-		}
-
-		if(e1.getIsEnemy() && e2.getIsBullet()) {
-			return !e2.getIsFriendly();
-		} else if (e2.getIsEnemy() && e1.getIsBullet()) {
-			return !e1.getIsFriendly();
-		}
-		return false;
+		return e1.getIsFriendly() == e2.getIsFriendly();
 	}
 
 	public boolean checkCollisions(Entity e1, Entity e2) {

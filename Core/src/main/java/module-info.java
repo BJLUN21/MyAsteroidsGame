@@ -6,8 +6,15 @@ module Core {
 	requires Common;
 	requires java.desktop;
 	requires com.badlogic.gdx;
+	requires spring.context;
+	requires spring.beans;
+
+	opens dk.sdu.mmmi.cbse.main to spring.core;
 
 	uses IGamePluginService;
 	uses IEntityProcessingService;
 	uses IPostEntityProcessingService;
+
+	exports dk.sdu.mmmi.cbse.beans to spring.beans;
+	exports dk.sdu.mmmi.cbse.main;
 }

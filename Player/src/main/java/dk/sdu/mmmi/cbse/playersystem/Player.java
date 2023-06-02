@@ -9,5 +9,6 @@ public class Player extends Entity {
 
 	public Player() {
 		setIsPlayer(true);
+		setIsFriendly(true);
 	}
 }

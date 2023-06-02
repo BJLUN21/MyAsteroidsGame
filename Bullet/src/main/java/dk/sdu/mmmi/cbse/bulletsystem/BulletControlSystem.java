@@ -6,10 +6,9 @@ import dk.sdu.mmmi.cbse.common.data.World;
 import dk.sdu.mmmi.cbse.common.data.entityparts.LifePart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.MovingPart;
 import dk.sdu.mmmi.cbse.common.data.entityparts.PositionPart;
-import dk.sdu.mmmi.cbse.common.services.BulletSPI;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 
-public class BulletControlSystem implements IEntityProcessingService, BulletSPI {
+public class BulletControlSystem implements IEntityProcessingService {
 	@Override
 	public void process(GameData gameData, World world) {
 
@@ -53,30 +52,5 @@ public class BulletControlSystem implements IEntityProcessingService, BulletSPI 
 
 		entity.setShapeX(shapex);
 		entity.setShapeY(shapey);
-	}
-
-	@Override
-	public Entity createBullet(Entity e, GameData gameData) {
-		PositionPart pp = e.getPart(PositionPart.class);
-
-		float x = pp.getX();
-		float y = pp.getY();
-		float radians = pp.getRadians();
-
-		float maxSpeed = 500;
-		float acceleration = 5000;
-		float deceleration = 0;
-
-		float rotationSpeed = 0;
-
-		float radius = 0.5f;
-
-		Entity bullet = new Bullet(true);
-		bullet.add(new MovingPart(deceleration, acceleration, maxSpeed, rotationSpeed));
-		bullet.add(new PositionPart(x + (float) Math.cos(radians) * 12, y + (float) Math.sin(radians) * 12, radians));
-		bullet.add(new LifePart(1,1));
-		bullet.setRadius(radius);
-
-		return bullet;
 	}
 }

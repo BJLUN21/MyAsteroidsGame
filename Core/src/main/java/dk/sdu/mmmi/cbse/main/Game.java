@@ -8,18 +8,28 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import dk.sdu.mmmi.cbse.common.data.Entity;
 import dk.sdu.mmmi.cbse.common.data.GameData;
 import dk.sdu.mmmi.cbse.common.data.World;
-import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
-import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
-import dk.sdu.mmmi.cbse.common.services.IPostEntityProcessingService;
-import dk.sdu.mmmi.cbse.common.util.SPILocator;
+import dk.sdu.mmmi.cbse.beans.EntityProcessingService;
+import dk.sdu.mmmi.cbse.beans.GamePluginService;
+import dk.sdu.mmmi.cbse.beans.PostEntityProcessingService;
 import dk.sdu.mmmi.cbse.managers.GameInputProcessor;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Game implements ApplicationListener {
 
 	private static OrthographicCamera cam;
 	private final GameData gameData = new GameData();
 	private ShapeRenderer sr;
 	private World world = new World();
+
+	private AnnotationConfigApplicationContext applicationContext;
+
+	public Game() {
+		this.applicationContext = new AnnotationConfigApplicationContext();
+		this.applicationContext.scan("dk.sdu.mmmi.cbse.beans");
+		this.applicationContext.refresh();
+	}
 
 	@Override
 	public void create() {
@@ -37,9 +47,9 @@ public class Game implements ApplicationListener {
 				new GameInputProcessor(gameData)
 		);
 
-		for (IGamePluginService iGamePluginService : SPILocator.locateAll(IGamePluginService.class)) {
-			iGamePluginService.start(gameData, world);
-		}
+		((GamePluginService) applicationContext.getBean("gamePluginService")).start(gameData, world);
+
+
 	}
 
 	@Override
@@ -60,13 +70,10 @@ public class Game implements ApplicationListener {
 
 	private void update() {
 		// Update
-		for (IEntityProcessingService entityProcessorService : SPILocator.locateAll(IEntityProcessingService.class)) {
-			entityProcessorService.process(gameData, world);
-		}
+		((EntityProcessingService) applicationContext.getBean("entityProcessingService")).process(gameData, world);
 
-		for (IPostEntityProcessingService postEntityProcessorService : SPILocator.locateAll(IPostEntityProcessingService.class)) {
-			postEntityProcessorService.process(gameData, world);
-		}
+		((PostEntityProcessingService) applicationContext.getBean("postEntityProcessingService")).process(gameData, world);
+
 	}
 
 	private void draw() {

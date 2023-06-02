@@ -2,11 +2,11 @@ import dk.sdu.mmmi.cbse.common.services.BulletSPI;
 import dk.sdu.mmmi.cbse.common.services.IEntityProcessingService;
 import dk.sdu.mmmi.cbse.common.services.IGamePluginService;
 
-module CommonBullet {
+module Bullet {
     exports dk.sdu.mmmi.cbse.bulletsystem;
     requires Common;
 
     provides IGamePluginService with dk.sdu.mmmi.cbse.bulletsystem.BulletPlugin;
-    provides BulletSPI with dk.sdu.mmmi.cbse.bulletsystem.BulletControlSystem;
+    provides BulletSPI with dk.sdu.mmmi.cbse.bulletsystem.BulletPlugin;
     provides IEntityProcessingService with dk.sdu.mmmi.cbse.bulletsystem.BulletControlSystem;
 }

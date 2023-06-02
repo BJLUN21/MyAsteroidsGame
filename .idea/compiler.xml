@@ -17,6 +17,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="CommonAsteroids" target="9" />
+      <module name="MyAsteroids.Game" target="9" />
     </bytecodeTargetLevel>
   </component>
 </project>
